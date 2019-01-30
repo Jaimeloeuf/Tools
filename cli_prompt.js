@@ -10,7 +10,7 @@ const stdin = process.stdin.setEncoding('utf-8');
 
 const prompt = (prompt_symbol = '> ') => print(prompt_symbol);
 
-// Display prompt user to input data in console.
+// Display prompt to user to input data in console at the start of the prompt running.
 prompt();
 
 
@@ -18,29 +18,59 @@ prompt();
 // The user of this library can either use the default event Handler for new data or use their own functions
 
 
-// When user input data and click enter key.
-stdin.on('data', (data) => {
-	// Clean the input of hidden unix type control/command keys with Regex replace
-	data = data.replace(/[\n\r\t]/g, '');
+// Function used to clean a string up, to only return ascii characters with no system control characters
+function clean(str) {
+	// Clean up whitespaces around the sentence body
+	str = str.trim();
 
-	// Get a function from the object and call that function immediately
-	map_wrapper(data)();
+	// Clean the input of hidden unix type control/command keys with Regex replace
+	str = str.replace(/[\n\r\t]/g, '');
+
+	// Remove any non-ascii characters
+	str = str.replace(/[^\x20-\x7E]/g, '');
+
+	return str;
+}
+
+// What is the input is more than one word? A sentence seperated by space?
+// Allow the user to do something like the Path-to-RegExp lib with URLs
+
+// When user input data and click enter key.
+stdin.on('data', (input) => {
+	// Clean up the input for further processing.
+	input = clean(input);
+
+	// Split the input, which can be sentences by their spaces into an array
+	input = input.split(' ');
+
+	// If the user entered only 1 word, or enter is pressed directly without any words
+	if (input.length < 2) {
+		// Get a function from the object and call that function immediately. This does direct word mapping unlike a sentence
+		single_word_fn(input)();
+	}
+	else {
+		// If the user entered a sentence, of 2 or more words, check through all the possible sentence structures
+
+	}
+
 
 	// Display the prompt again on every new line / input.
 	prompt();
 });
 
-const map_wrapper = (input) => hashMap[input] ? hashMap[input] : none;
+const single_word_fn = (input) => single_word_commands[input] ? single_word_commands[input] : none;
 
+// This should be a function that the user can specify,
+// Function to be ran when word does not match any specified words
 function none() {
 	// Print user input in console.
-	process.stdout.write('User Input Data : ' + data);
+	print('User Input Data : ' + input);
 }
 
-hashMap = {
+single_word_commands = {
 	exit: () => {
 		// User inputs 'exit' to quit program
-		console.log("User input complete, program exit.");
+		log("Exiting prompt now...");
 		process.exit();
 	}
 };
