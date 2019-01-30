@@ -1,8 +1,18 @@
 'use strict'; // Use strict version of JavaScript
 
 const fs = require('fs');
+const prompt = require('./cli_prompt');
 
-// const log = (str) => console.log(str);
+// Simple console.log() function wrapper
+const log = (str) => console.log(str);
+
+
+log('')
+
+prompt('Hello: ')
+	.then((val) => {
+		console.log(val)
+	});
 
 const file_name = 'hashtags.txt';
 
@@ -36,7 +46,7 @@ fs.writeFileSync(`transformed_${file_name}`, file_content);
 
 /*	Example:
 	input:
-		#hashtag #hashtag1 #hashtag2 #hashtag3 
+		#hashtag #hashtag1 #hashtag2 #hashtag3
 	output:
 		session.like_by_tags(["hashtag", "hashtag1", "hashtag2", "hashtag3"], amount=30)
 */
