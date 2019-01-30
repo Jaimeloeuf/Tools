@@ -1,83 +1,57 @@
 // 'use strict'; // Use strict version of JavaScript
 
-// // Create a line reading interface
-// const readline = require('readline').createInterface({
-// 	input: process.stdin,
-// 	output: process.stdout
-// });
+const log = (str) => console.log(str);
+const print = (buf) => process.stdout.write(buf);
 
+// Get process.stdin as the standard input object with UTF8 encoding
+const stdin = process.stdin.setEncoding('utf-8');
 
-// /* 
-// const rl = () =>
-// 	new Promise((resolve) => {
-// 		readline.question(`What's your name?`, (ans) => {
+// print('Please input text in command line.\n');
 
-// 			resolve(ans);
+const prompt = (prompt_symbol = '> ') => print(prompt_symbol);
 
-// 			log('Before close')
-// 			readline.close();
-// 		});
-// 	});
+// Display prompt user to input data in console.
+prompt();
 
 
 
-// rl()
-// 	.then((val) => {
-// 		console.log(val)
-// 		log('After print')
-// 	});
+// The user of this library can either use the default event Handler for new data or use their own functions
 
-// */
-
-
-
-
-// module.exports = (input = '') =>
-// 	new Promise((resolve) => {
-// 		readline.question(input, (ans) => {
-// 			resolve(ans);
-// 			// readline.close();
-// 		});
-// 	});
-
-
-
-// module.exports('Hello: ')
-// 	.then((val) => {
-// 		console.log(val)
-// 	});
-
-// module.exports('Ques fr u: ')
-// 	.then((val) => {
-// 		console.log(val)
-// 		readline.close();
-// 	});
-
-
-
-
-// Get process.stdin as the standard input object.
-var standard_input = process.stdin;
-
-// Set input character encoding.
-standard_input.setEncoding('utf-8');
-
-// Prompt user to input data in console.
-console.log("Please input text in command line.");
-
-process.stdout.write(': ');
 
 // When user input data and click enter key.
-standard_input.on('data', function (data) {
+stdin.on('data', (data) => {
+	// Clean the input of hidden unix type control/command keys with Regex replace
+	data = data.replace(/[\n\r\t]/g, '');
 
-	// User input exit.
-	if (data === 'exit\n') {
-		// Program exit.
+	// Get a function from the object and call that function immediately
+	map_wrapper(data)();
+
+	// Display the prompt again on every new line / input.
+	prompt();
+});
+
+const map_wrapper = (input) => hashMap[input] ? hashMap[input] : none;
+
+function none() {
+	// Print user input in console.
+	process.stdout.write('User Input Data : ' + data);
+}
+
+hashMap = {
+	exit: () => {
+		// User inputs 'exit' to quit program
 		console.log("User input complete, program exit.");
 		process.exit();
-	} else {
-		// Print user input in console.
-		process.stdout.write('User Input Data : ' + data);
 	}
-	process.stdout.write(': ');
-});
+};
+
+
+
+/*	References
+https://nodejs.org/api/readline.html
+https://blog.logrocket.com/creating-nodemon-in-node-js-70b295c2610c
+https://medium.com/netscape/nodemon-events-run-tasks-at-server-start-restart-crash-exit-93a34c54dfd8
+https://www.dev2qa.com/node-js-get-user-input-from-command-line-prompt-example/ */
+
+
+/* Create the router thing for user to build upon it for theri own use. */

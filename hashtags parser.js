@@ -7,10 +7,19 @@ const prompt = require('./cli_prompt');
 const log = (str) => console.log(str);
 
 
-log('')
+log('Enter a file name     man for manual');
 
 prompt('Hello: ')
 	.then((val) => {
+		switch (val) {
+			case 'man':
+				print_menu();
+				break;
+			case a:
+
+			default:
+				log('ERR: Invalid input. Please try again.')
+		}
 		console.log(val)
 	});
 
