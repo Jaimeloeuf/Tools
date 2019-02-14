@@ -167,3 +167,73 @@ function remove_duplicates(input_file) {
 	fs.writeFileSync(output_file, file_content);
 
 }
+
+
+/* For the 2 functions below
+
+	Add a check to verify the files first.
+	So if remove_commas is called but the input file is not a comma seperated file, then return false and end the function.
+*/
+
+
+function add_commas(input_file, output_file) {
+	// Read the file into memory
+	let file_content = fs.readFileSync(input_file, 'utf8');
+
+	// Split all the words on space
+	file_content = file_content.split(' ');
+	// Get the number of elements in the array
+	let len = file_content.length;
+
+	// Loop through all the elements in the array
+	while (--len) {
+		// Remove any empty elements from the array
+		if (!file_content[len]) {
+			file_content.splice(len, 1);
+			continue; // Skip this loop cycle
+		}
+		// Add comma and space after each word
+		file_content[len] = `${file_content[len]}, `;
+	}
+
+	// Create and clean up the string by joining the array, triming off whitespaces and removing the last comma
+	file_content = file_content.join('').trim().slice(0, file_content.lastIndexOf(','));
+
+	// If output file is undefined
+	if (!output_file)
+		output_file = `commas_added_${input_file}`; // Create output file's name as a extended input file name
+	// Write the contents to another file for the user to use.
+	fs.writeFileSync(output_file, file_content);
+}
+
+function rm_commas(input_file) {
+	// Read the file into memory
+	let file_content = fs.readFileSync(input_file, 'utf8');
+
+	// Split all the words on the commas, by doing this, the comma will be automatically removed
+	file_content = file_content.split(',');
+	// Get the number of elements in the array
+	let len = file_content.length;
+
+	// Loop through all the elements in the array
+	while (--len) {
+		// Remove any empty elements from the array
+		if (!file_content[len]) {
+			file_content.splice(len, 1);
+			continue; // Skip this loop cycle
+		}
+		// Trim out all white spaces in the words
+		file_content[len] = file_content[len].trim();
+		// Add a space at the end of the word. (Makes sure there is only one space and only at the end of the word)
+		file_content[len] = `${file_content[len]} `;
+	}
+
+	// Create and clean up the string by joining the array, and triming off whitespaces of the string as a whole
+	file_content = file_content.join('').trim();
+
+	// If output file is undefined
+	if (!output_file)
+		output_file = `commas_removed_${input_file}`; // Create output file's name as a extended input file name
+	// Write the contents to another file for the user to use.
+	fs.writeFileSync(output_file, file_content);
+}
