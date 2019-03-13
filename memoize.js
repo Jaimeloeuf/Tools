@@ -12,7 +12,7 @@ function memoize(fn) {
     // Create a results object map in memory, that is only accessible by memoized_fn's closure
     const results_map = {};
     // Create a result object for storing the computed result.
-    const result;
+    var result;
 
     function memoized_fn(input) {
         // Get the output stored in the results_map for the given input
