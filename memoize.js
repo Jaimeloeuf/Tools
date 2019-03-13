@@ -40,7 +40,7 @@ function memoize(fn) {
 
         result = results_map.get
 
-            fn(...inputs);
+        fn(...inputs);
     }
 
     return memoized_fn;
